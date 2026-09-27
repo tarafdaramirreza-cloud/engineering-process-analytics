@@ -1,0 +1,7 @@
+region,batch_count,yield_percent,defect_rate_percent,energy_kWh
+candidate_screen,330,95.632,2.971,37.522
+outside_candidate_screen,2670,92.119,6.549,36.289
+short_cycle,194,83.624,15.158,31.215
+outside_short_cycle,2806,93.12,5.533,36.785
+temperature_tails,301,85.352,13.407,37.208
+outside_temperature_tails,2699,93.304,5.346,36.338

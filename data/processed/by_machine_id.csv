@@ -1,0 +1,4 @@
+machine_id,yield_percent_count,yield_percent_mean,yield_percent_std,defect_rate_percent_count,defect_rate_percent_mean,defect_rate_percent_std,energy_kWh_count,energy_kWh_mean,energy_kWh_std
+M1,1050,93.178,5.631,1050,5.484,5.68,1050,35.372,4.639
+M2,993,92.547,5.439,993,6.092,5.5,993,36.23,4.702
+M3,957,91.725,6.077,957,6.957,6.127,957,37.783,4.789
