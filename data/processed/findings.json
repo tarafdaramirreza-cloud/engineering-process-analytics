@@ -1,0 +1,59 @@
+{
+  "rows": 3000,
+  "means": {
+    "yield_percent": 91.59543333333333,
+    "defect_rate_percent": 7.0815,
+    "energy_kWh": 36.41628333333333
+  },
+  "regions": {
+    "candidate_screen": {
+      "batch_count": 330,
+      "yield_percent": 95.55939393939393,
+      "defect_rate_percent": 3.034545454545454,
+      "energy_kWh": 37.58339696969696
+    },
+    "outside_candidate_screen": {
+      "batch_count": 2670,
+      "yield_percent": 91.10550561797753,
+      "defect_rate_percent": 7.581685393258426,
+      "energy_kWh": 36.27203333333333
+    },
+    "short_cycle": {
+      "batch_count": 194,
+      "yield_percent": 78.99123711340206,
+      "defect_rate_percent": 19.85979381443299,
+      "energy_kWh": 31.393494845360824
+    },
+    "outside_short_cycle": {
+      "batch_count": 2806,
+      "yield_percent": 92.46685673556664,
+      "defect_rate_percent": 6.198039914468994,
+      "energy_kWh": 36.76354668567356
+    },
+    "temperature_tails": {
+      "batch_count": 301,
+      "yield_percent": 81.7063122923588,
+      "defect_rate_percent": 17.14950166112957,
+      "energy_kWh": 37.36508637873754
+    },
+    "outside_temperature_tails": {
+      "batch_count": 2699,
+      "yield_percent": 92.69829566506114,
+      "defect_rate_percent": 5.958688403112264,
+      "energy_kWh": 36.31047017413857
+    }
+  },
+  "machine_defect_means": {
+    "M1": 6.246666666666667,
+    "M2": 6.907049345417925,
+    "M3": 8.178474399164054
+  },
+  "material_defect_means": {
+    "A": 6.8693726937269375,
+    "B": 7.446911196911197,
+    "C": 6.931855500821018
+  },
+  "temperature_defect_pearson": -0.08858782040897864,
+  "seed": 42,
+  "data_origin": "synthetic_demonstration"
+}
