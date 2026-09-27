@@ -1,4 +1,4 @@
-# Manufacturing Process Analytics & Optimization
+# Manufacturing Process Analytics
 
 **Phase 1 — exploratory engineering analysis | Synthetic demonstration data**
 
@@ -27,17 +27,22 @@ The pipeline recreates data, tables, figures, and the findings section below. Th
 ## Verified Phase 1 findings
 
 <!-- BEGIN GENERATED FINDINGS -->
-Across **3,000 synthetic batches**, mean first-pass yield was **91.60%**, tracked defect rate **7.08%**, and energy **36.42 kWh/batch**.
+Across **3,000 synthetic batches**, mean first-pass yield was **92.51%**, tracked defect rate **6.16%**, and energy **36.43 kWh/batch**.
 
-- Cycles below 9 min (194 batches) had mean defect rate **19.86%**, versus **6.20%** for other batches.
-- A predefined candidate screen (174–186 °C, 4.5–5.5 MPa, 11.5–15 min) included **330 batches** with mean defect rate **3.03%** and yield **95.56%**. Outside the screen, mean defect rate was **7.58%**. This is an exploratory comparison, not a validated operating window.
-- Candidate-screen energy averaged **37.58 kWh/batch**, versus **36.27 kWh/batch** outside it; the quality association comes with higher average energy.
-- Machine mean defect rates: M1: **6.25%**; M2: **6.91%**; M3: **8.18%**.
-- Material mean defect rates: A: **6.87%**; B: **7.45%**; C: **6.93%**.
-- Temperature–defect Pearson correlation was **-0.089**. The scatterplots show why a single linear correlation cannot describe the simulated nonlinear response.
+- Cycles below 9 min (194 batches) had mean defect rate **15.16%**, versus **5.53%** for other batches.
+- A predefined candidate screen (174–186 °C, 4.5–5.5 MPa, 11.5–15 min) included **330 batches** with mean defect rate **2.97%** and yield **95.63%**. Outside the screen, mean defect rate was **6.55%**. This is an exploratory comparison, not a validated operating window.
+- Candidate-screen energy averaged **37.52 kWh/batch**, versus **36.29 kWh/batch** outside it; the quality association comes with higher average energy.
+- The pattern remains directionally consistent after stratifying by material: A (147 inside): defects **2.69% vs 6.42%**, energy **37.33 vs 36.26 kWh**; B (115 inside): defects **3.28% vs 6.78%**, energy **37.90 vs 36.62 kWh**; C (68 inside): defects **3.05% vs 6.46%**, energy **37.31 vs 35.80 kWh**. These remain unadjusted, non-causal comparisons.
+- Machine mean defect rates: M1: **5.48%**; M2: **6.09%**; M3: **6.96%**.
+- Material mean defect rates: A: **6.01%**; B: **6.39%**; C: **6.08%**.
+- Temperature–defect Pearson correlation was **-0.075**. The scatterplots show why a single linear correlation cannot describe the simulated nonlinear response.
 
 These are unadjusted associations in synthetic data. Group composition and process settings can influence comparisons. Yield and tracked defects share a unit balance, so their strong inverse correlation is partly definitional.
 <!-- END GENERATED FINDINGS -->
+
+![Candidate-region quality and energy tradeoff](figures/candidate_region_tradeoff.png)
+
+The candidate-region comparison is descriptive and pooled across batches. The material-stratified results below help test whether the overall pattern is driven by material mix.
 
 ![Synthetic process distributions](figures/distributions.png)
 ![Synthetic process relationships](figures/process_relationships.png)
@@ -62,25 +67,28 @@ The dataset contains 3,000 synthetic batches generated with NumPy seed **42**. E
 
 Yield, tracked defects, and other losses sum to 100%. There is no rework or double counting. Rates use 0.1 percentage-point increments. Energy validation uses an illustrative 200 kWh upper bound, not an equipment rating.
 
-The transparent generator uses squared deviations from material-specific reference temperatures (A: 180 °C, B: 187 °C, C: 174 °C), pressure deviation, a short-cycle penalty, and a temperature–pressure interaction. A logistic transform bounds defect probability; binomial draws turn probabilities into unit counts. Machine offsets and unobserved batch noise prevent deterministic responses. Energy increases with thermal demand, cycle time, and pressure, with machine factors and multiplicative noise. Parameters are illustrative assumptions, not a calibrated physical model. Clipping process settings imposes hard bounds and can introduce boundary pileups.
+The transparent generator uses squared deviations from material-specific reference temperatures (A: 180 °C, B: 187 °C, C: 174 °C), pressure deviation, a short-cycle penalty, and a temperature–pressure interaction. A logistic response followed by smooth saturation at a 50% latent defect probability keeps extreme conditions severe without implying near-total batch failure; binomial draws turn probabilities into unit counts, so observed rates can vary around that ceiling. Machine offsets and unobserved batch noise prevent deterministic responses. Energy increases with thermal demand, cycle time, and pressure, with machine factors and multiplicative noise. Parameters are illustrative assumptions, not a calibrated physical model. Clipping process settings imposes hard bounds and can introduce boundary pileups.
 
 ## Workflow and key analyses
 
 1. Generate synthetic batches using a fixed seed.
-2. Reload the saved CSV and validate schema, types, missing data, duplicates, bounds, timestamps, and unit balance. Failed checks raise an error.
-3. Export summary statistics, machine/material comparisons (count, mean, standard deviation), Pearson correlations, and predefined operating-region comparisons.
-4. Save four labeled Matplotlib figures: distributions, group boxplots, process–outcome scatterplots, and a correlation matrix.
+2. Reload the saved CSV and validate the exact schema, dtypes, sequential IDs, timestamp start and 30-minute cadence, missing data, duplicates, bounds, categories, and unit balance. Failed checks raise an error.
+3. Export clean summary statistics, timestamp coverage, flattened machine/material comparisons, Pearson correlations, predefined operating-region comparisons, and material-stratified candidate-region results.
+4. Save five labeled Matplotlib figures: distributions, group boxplots, process–outcome scatterplots, a correlation matrix, and a candidate-region quality/energy comparison.
 5. Regenerate this README's numerical findings directly from the analysis results.
 
-`data/processed/region_comparisons.csv` includes a candidate screen, cycles below 9 minutes, and temperature tails below 160 or above 200 °C, each compared with its complement. Screens are chosen for illustration before inspecting results. No search for an optimum or significance test is performed.
+`data/processed/region_comparisons.csv` includes a candidate screen, cycles below 9 minutes, and temperature tails below 160 or above 200 °C, each compared with its complement. `candidate_region_by_material.csv` repeats the candidate comparison within each material. Screens are chosen for illustration before inspecting results. No search for an optimum or significance test is performed.
 
 ## Repository structure
 
 ```text
 engineering-process-analytics/
 ├── README.md
+├── LICENSE
+├── VERIFICATION.md
 ├── requirements.txt
 ├── .gitignore
+├── .github/workflows/ci.yml
 ├── data/
 │   ├── raw/synthetic_batches.csv
 │   └── processed/  # validation, findings, summary and comparison tables
@@ -93,7 +101,7 @@ engineering-process-analytics/
 │   ├── run_pipeline.py
 │   └── execute_notebook.py
 ├── notebooks/01_exploratory_analysis.ipynb
-├── figures/  # four generated PNGs
+├── figures/  # five generated PNGs
 └── tests/test_pipeline.py
 ```
 
@@ -110,7 +118,7 @@ Start with `generate_data.py` to understand the assumptions, then `data_quality.
 - The candidate screen pools materials with different response centers. Its apparent advantage requires controlled experiments and economic assessment before any real application.
 - Energy is per batch, not measured plant energy or a validated cost/carbon model. Equal batch size simplifies comparison.
 - Review process bounds, energy assumptions, and terminology with a domain specialist before presenting the project for a specific industry. Be ready to explain the response equations, unit balance, noise, and why correlation does not imply causality.
-- No license is selected; the owner should choose reuse terms before publishing.
+- The repository is released under the MIT License; synthetic data remain demonstration material rather than validated process knowledge.
 
 ## Planned future phases — not implemented
 

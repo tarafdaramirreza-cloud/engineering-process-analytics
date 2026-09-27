@@ -1,0 +1,4 @@
+material_type,inside_count,outside_count,inside_defect_rate_percent_mean,outside_defect_rate_percent_mean,inside_energy_kWh_mean,outside_energy_kWh_mean
+A,147,1208,2.695,6.416,37.325,36.256
+B,115,921,3.276,6.776,37.899,36.621
+C,68,541,3.054,6.456,37.311,35.799

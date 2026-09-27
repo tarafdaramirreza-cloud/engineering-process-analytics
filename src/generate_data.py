@@ -5,6 +5,9 @@ import pandas as pd
 
 SEED = 42
 ROW_COUNT = 3000
+START_TIMESTAMP = "2025-01-01 00:00:00"
+TIMESTAMP_FREQUENCY = "30min"
+MAX_DEFECT_PROBABILITY = 0.50
 
 
 def generate_data(n_batches=ROW_COUNT, seed=SEED):
@@ -36,7 +39,14 @@ def generate_data(n_batches=ROW_COUNT, seed=SEED):
                 + 0.28 * pressure_offset**2 + 0.45 * short_cycle**2
                 - 0.20 * thermal_offset * pressure_offset + machine_shift
                 + rng.normal(0, 0.40, n_batches))
-    defect_probability = 1 / (1 + np.exp(-log_odds))
+    raw_defect_probability = 1 / (1 + np.exp(-log_odds))
+    # A smooth saturation keeps extreme conditions severe without implying that
+    # nearly every unit in a batch fails in this generic process scenario.
+    defect_probability = (
+        MAX_DEFECT_PROBABILITY * raw_defect_probability
+        / (MAX_DEFECT_PROBABILITY
+           + (1 - MAX_DEFECT_PROBABILITY) * raw_defect_probability)
+    )
     defect_units = rng.binomial(1000, defect_probability)
     # Handling/startup losses are disjoint from tracked defects.
     other_probability = np.clip(rng.normal(0.014, 0.005, n_batches), 0.002, 0.04)
@@ -48,7 +58,9 @@ def generate_data(n_batches=ROW_COUNT, seed=SEED):
     energy *= energy_factor * rng.lognormal(0, 0.055, n_batches)
     return pd.DataFrame({
         "batch_id": [f"B{i:05d}" for i in range(1, n_batches + 1)],
-        "timestamp": pd.date_range("2025-01-01", periods=n_batches, freq="30min"),
+        "timestamp": pd.date_range(
+            START_TIMESTAMP, periods=n_batches, freq=TIMESTAMP_FREQUENCY
+        ),
         "material_type": material, "machine_id": machine,
         "temperature_C": temperature, "pressure_MPa": pressure,
         "cycle_time_min": cycle, "yield_percent": good_units / 10,

@@ -1,11 +1,12 @@
-# Phase 1 verification — synthetic demonstration data
+# Phase 1 verification
 
-- Executed with Python 3.12 in a newly created virtual environment using requirements.txt versions.
-- Pipeline: passed 26 validation checks on the persisted 3,000-row CSV.
-- Tests: 4 passed, covering reproducibility, schema/count, bounds/unit balance, and rejection of invalid data.
-- Notebook: all code cells executed; no error outputs.
-- README: headline values independently checked against saved CSV means; findings are generated from the analysis results.
-- Figures: all four PNGs inspected for labels, units, layout, and synthetic-data disclosure.
-- Local environment: notebook first failed because the sandbox blocks the default IPython home cache. Rerun succeeded with IPYTHONDIR, MPLCONFIGDIR, and JUPYTER_CONFIG_DIR pointing to writable work directories. Windows emitted a nonfatal ZeroMQ event-loop warning.
-- Git checkout could not be established: bundled Git first failed to locate its HTTPS helper; after locating it, Windows TLS credential initialization failed. Deliverables are local files, not a Git checkout or a published GitHub commit.
-- Phase 2 has not been started.
+Phase 1 is published for review on branch `codex/phase-1` in pull request #1.
+
+- The pipeline regenerates the 3,000-row synthetic dataset, processed CSV/JSON outputs, five figures, and README findings from seed 42.
+- Persisted data pass all 22 schema, type, sequence, timestamp, range, category, and unit-balance checks.
+- All 17 unit tests pass, including negative cases for each validation rule.
+- Every notebook code cell executes without an error output.
+- README numerical findings are generated from the saved analysis results.
+- GitHub Actions repeats the tests, pipeline, deterministic analytical-output check, and notebook execution on pushes and pull requests.
+
+The dataset is synthetic and intended only for demonstration. Phase 2 methods are not included.
